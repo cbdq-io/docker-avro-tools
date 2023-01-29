@@ -34,3 +34,4 @@ rules:
       .github/workflows/ci.yml
       .github/workflows/latest.yml
       .github/workflows/publish.yml
+      docker-compose*.yml

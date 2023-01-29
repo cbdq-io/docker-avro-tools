@@ -1,2 +1,13 @@
 ---
-version
+version: "3"
+
+services:
+  avro-tools:
+    build:
+      context: .
+      args:
+        AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION}"
+      tags:
+        - "avro-tools:${AVRO_TOOLS_VERSION}"
+        - "avro-tools:latest"
+    container_name: docker

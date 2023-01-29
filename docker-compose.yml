@@ -8,6 +8,7 @@ services:
       args:
         AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION}"
       tags:
-        - "avro-tools:${AVRO_TOOLS_VERSION}"
-        - "avro-tools:latest"
+        - "ghcr.io/cbdq-io/avro-tools:${AVRO_TOOLS_VERSION}"
+        - "ghcr.io/cbdq-io/avro-tools:latest"
+        - "ghcr.io/cbdq-io/avro-tools:stable"
     container_name: docker

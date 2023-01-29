@@ -29,7 +29,7 @@ docker run \
   --rm \
   --volume "$( pwd )/tests/resources:/mnt/idl" \
   --volume /tmp:/mnt/schemas \
-  ghcr.io/cbdq-io/docker-avro-tools:1.9.1 \
+  ghcr.io/cbdq-io/avro-tools:1.9.1 \
   idl2schemata /mnt/idl/AccountService.avdl /mnt/schemas
 ```
 
@@ -52,4 +52,32 @@ will create a file called `/tmp/Account.avsc` with the following contents:
     "default" : null
   } ]
 }
+```
+
+## Manually Deploying a Built Image
+
+First authenticate against the GitHub Container Registry:
+
+```shell
+echo $GITHUB_TOKEN | docker login ghcr.io -u GITHUB_USERNAME --password-stdin
+```
+
+Then prepare the Docker images to be deployed by running:
+
+```shell
+make
+```
+
+This will create the following images:
+
+1. `ghcr.io/cbdq-io/avro-tools:1.9.1`
+1. `ghcr.io/cbdq-io/avro-tools:latest`
+1. `ghcr.io/cbdq-io/avro-tools:stable`
+
+Push whichever of these images that you want to the registry, for example
+this command pushes the first two from the list above:
+
+```shell
+docker push ghcr.io/cbdq-io/avro-tools:1.9.1
+
 ```

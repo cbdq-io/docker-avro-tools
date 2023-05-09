@@ -1,5 +1,7 @@
 # docker-avro-tools
 
+[![CI](https://github.com/cbdq-io/docker-avro-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/cbdq-io/docker-avro-tools/actions/workflows/ci.yml)
+
 Make [avro-tools](https://avro.apache.org/docs/1.11.1/getting-started-java/)
 available via a Docker container.
 

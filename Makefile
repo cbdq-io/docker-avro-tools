@@ -1,4 +1,4 @@
-AVRO_TOOLS_VERSION = 1.9.1
+AVRO_TOOLS_VERSION = 1.11.1
 
 all: clean lint build test
 
@@ -22,6 +22,7 @@ clean:
 cleanall: clean
 	rm -f KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
 	docker system prune --force --volumes
+	docker volume prune --all --force
 
 lint:
 	yamllint -s .

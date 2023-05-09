@@ -31,14 +31,14 @@ Feature: Avro Tools Container Tests
 
   Scenario: Check the JAR Executes as Expected
     Given the host with URL "docker://avro-tools" is ready
-    When the command is "java -jar /usr/local/avro-tools/avro-tools-1.9.1.jar"
+    When the command is "java -jar /usr/local/avro-tools/avro-tools-1.11.1.jar"
     Then the command return code is 1
-    And the command stderr contains "Version 1.9.1"
+    And the command stderr contains "Version 1.11.1"
     And the command stderr contains "Available tools:"
 
   Scenario: Check JAR Built With Java 8
     Given the host with URL "docker://root@avro-tools" is ready
-    When the command is "jar xf avro-tools-1.9.1.jar"
+    When the command is "jar xf avro-tools-1.11.1.jar"
     And the command is "yum install -y file"
     And the command is "file org/apache/avro/Schema.class"
     Then the command stdout contains "(Java 1.8)"

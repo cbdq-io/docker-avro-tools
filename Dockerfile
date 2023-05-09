@@ -4,6 +4,7 @@ ARG AVRO_TOOLS_VERSION
 
 RUN yum clean all \
   && rm -rf /var/cache/yum \
+  && yum upgrade -y java-1.8.0-amazon-corretto-devel openldap \
   && yum install -y shadow-utils \
   && useradd \
     --comment 'Avro Tools User' \

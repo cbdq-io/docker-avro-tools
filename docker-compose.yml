@@ -6,7 +6,7 @@ services:
     build:
       context: .
       args:
-        AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION}"
+        AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION-SET_ME}"
       tags:
         - "ghcr.io/cbdq-io/avro-tools:${AVRO_TOOLS_VERSION}"
         - "ghcr.io/cbdq-io/avro-tools:latest"

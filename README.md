@@ -29,7 +29,7 @@ docker run \
   --rm \
   --volume "$( pwd )/tests/resources:/mnt/idl" \
   --volume /tmp:/mnt/schemas \
-  ghcr.io/cbdq-io/avro-tools:1.9.1 \
+  ghcr.io/cbdq-io/avro-tools:1.11.1 \
   idl2schemata /mnt/idl/AccountService.avdl /mnt/schemas
 ```
 
@@ -70,7 +70,7 @@ make
 
 This will create the following images:
 
-1. `ghcr.io/cbdq-io/avro-tools:1.9.1`
+1. `ghcr.io/cbdq-io/avro-tools:1.11.1`
 1. `ghcr.io/cbdq-io/avro-tools:latest`
 1. `ghcr.io/cbdq-io/avro-tools:stable`
 
@@ -78,6 +78,6 @@ Push whichever of these images that you want to the registry, for example
 this command pushes the first two from the list above:
 
 ```shell
-docker push ghcr.io/cbdq-io/avro-tools:1.9.1
+docker push ghcr.io/cbdq-io/avro-tools:1.11.1
 
 ```

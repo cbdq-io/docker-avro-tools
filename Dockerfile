@@ -1,5 +1,7 @@
 FROM amazoncorretto:8
 
+ARG AVRO_TOOLS_VERSION
+
 RUN yum clean all \
   && rm -rf /var/cache/yum \
   && yum install -y shadow-utils \
@@ -11,7 +13,9 @@ RUN yum clean all \
     --user-group \
     avro-tools
 
-COPY --chown=avro-tools:avro-tools avro-tools-1.9.1.jar /usr/local/avro-tools/avro-tools-1.9.1.jar
+COPY --chown=avro-tools:avro-tools \
+  avro-tools-${AVRO_TOOLS_VERSION}.jar \
+  /usr/local/avro-tools/avro-tools-${AVRO_TOOLS_VERSION}.jar
 WORKDIR /usr/local/avro-tools
 USER avro-tools
-ENTRYPOINT [ "java", "-jar", "/usr/local/avro-tools/avro-tools-1.9.1.jar" ]
+ENTRYPOINT [ "java", "-jar", "/usr/local/avro-tools/avro-tools-${AVRO_TOOLS_VERSION}.jar" ]

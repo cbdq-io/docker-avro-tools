@@ -20,6 +20,8 @@ clean:
 	docker rm -f avro-tools
 
 cleanall: clean
+	docker compose down -t 0
+	docker compose -f tests/compose/grype.yml down -t 0
 	rm -f KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
 	docker system prune --force --volumes
 	docker volume prune --all --force

@@ -19,4 +19,4 @@ COPY --chown=avro-tools:avro-tools \
   /usr/local/avro-tools/avro-tools-${AVRO_TOOLS_VERSION}.jar
 WORKDIR /usr/local/avro-tools
 USER avro-tools
-ENTRYPOINT [ "java", "-jar", "/usr/local/avro-tools/avro-tools-${AVRO_TOOLS_VERSION}.jar" ]
+ENTRYPOINT [ "java", "-jar", "/usr/local/avro-tools/avro-tools-1.11.1.jar" ]

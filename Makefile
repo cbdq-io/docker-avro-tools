@@ -1,6 +1,6 @@
-AVRO_TOOLS_VERSION = 1.11.1
+AVRO_TOOLS_VERSION = 1.11.3
 
-all: clean lint build test
+all: clean lint build test trivy
 
 KEYS:
 	curl --output KEYS https://downloads.apache.org/avro/KEYS
@@ -48,3 +48,9 @@ test:
 	  --rm \
 	  avro-tools
 	pytest
+
+trivy:
+	trivy image --severity HIGH,CRITICAL --ignore-unfixed ghcr.io/cbdq-io/avro-tools:latest
+
+update-trivy-ignore:
+	trivy image --format json --ignore-unfixed --severity HIGH,CRITICAL ghcr.io/cbdq-io/avro-tools:latest | jq -r '.Results[1].Vulnerabilities[].VulnerabilityID' | sort -u | tee .trivyignore

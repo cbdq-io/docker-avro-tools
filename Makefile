@@ -16,6 +16,9 @@ avro-tools-$(AVRO_TOOLS_VERSION).jar.asc:
 build: KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose build avro-tools
 
+changelog:
+	GIT_TAG=$(AVRO_TOOLS_VERSION) gitchangelog > CHANGELOG.md
+
 clean:
 	docker rm -f avro-tools
 

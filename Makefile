@@ -43,6 +43,9 @@ lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile
 	flake8
 
+tag:
+	@echo $(AVRO_TOOLS_VERSION)
+
 test:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose run \
 	  --detach \

@@ -48,7 +48,7 @@ test:
 	pytest
 
 trivy:
-	trivy image --severity HIGH,CRITICAL --ignore-unfixed ghcr.io/cbdq-io/avro-tools:latest
+	trivy image --severity HIGH,CRITICAL --ignore-unfixed avro-tools:latest
 
 update-trivy-ignore:
-	trivy image --format json --ignore-unfixed --severity HIGH,CRITICAL ghcr.io/cbdq-io/avro-tools:latest | jq -r '.Results[1].Vulnerabilities[].VulnerabilityID' | sort -u | tee .trivyignore
+	trivy image --format json --ignore-unfixed --severity HIGH,CRITICAL avro-tools:latest | jq -r '.Results[1].Vulnerabilities[].VulnerabilityID' | sort -u | tee .trivyignore

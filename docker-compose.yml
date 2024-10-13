@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 services:
   avro-tools:
     build:
@@ -8,7 +6,5 @@ services:
       args:
         AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION-SET_ME}"
       tags:
-        - "ghcr.io/cbdq-io/avro-tools:${AVRO_TOOLS_VERSION}"
-        - "ghcr.io/cbdq-io/avro-tools:latest"
-        - "ghcr.io/cbdq-io/avro-tools:stable"
+        - "${REPO-}avro-tools:${TAG-latest}"
     container_name: docker

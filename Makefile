@@ -1,6 +1,6 @@
-AVRO_TOOLS_VERSION = 1.11.1
+AVRO_TOOLS_VERSION = 1.12.0
 
-all: clean lint build test
+all: clean lint build test trivy
 
 KEYS:
 	curl --output KEYS https://downloads.apache.org/avro/KEYS
@@ -16,6 +16,9 @@ avro-tools-$(AVRO_TOOLS_VERSION).jar.asc:
 build: KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose build avro-tools
 
+changelog:
+	GIT_TAG=$(AVRO_TOOLS_VERSION) gitchangelog > CHANGELOG.md
+
 clean:
 	docker rm -f avro-tools
 
@@ -26,19 +29,14 @@ cleanall: clean
 	docker system prune --force --volumes
 	docker volume prune --all --force
 
-grype: KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
-	docker compose -f tests/compose/grype.yml up docker --wait
-	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c 'docker build --build-arg AVRO_TOOLS_VERSION=${AVRO_TOOLS_VERSION} -t avro-tools:latest /code'
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "docker images"
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "docker save -o /mnt/dump/avro-tools.tar avro-tools:latest"
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "ls -l /mnt/dump"
-	docker compose -f tests/compose/grype.yml run --rm grype
-
 lint:
 	yamllint -s .
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose config --quiet
 	docker run --rm -i hadolint/hadolint < Dockerfile
 	flake8
+
+tag:
+	@echo $(AVRO_TOOLS_VERSION)
 
 test:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose run \
@@ -48,3 +46,9 @@ test:
 	  --rm \
 	  avro-tools
 	pytest
+
+trivy:
+	trivy image --severity HIGH,CRITICAL --ignore-unfixed avro-tools:latest
+
+update-trivy-ignore:
+	trivy image --format json --ignore-unfixed --severity HIGH,CRITICAL avro-tools:latest | jq -r '.Results[1].Vulnerabilities[].VulnerabilityID' | sort -u | tee .trivyignore

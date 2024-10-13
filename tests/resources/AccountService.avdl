@@ -1,0 +1,11 @@
+@namespace("org.sample")
+protocol AccountService {
+
+    record Account {
+    long id;
+    string name;
+    union {null, string} description = null;
+    }
+
+    Account addAccount(string name, union {null, string} description);
+}

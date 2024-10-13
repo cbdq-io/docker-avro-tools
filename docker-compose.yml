@@ -1,0 +1,10 @@
+---
+services:
+  avro-tools:
+    build:
+      context: .
+      args:
+        AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION-SET_ME}"
+      tags:
+        - "${REPO-}avro-tools:${TAG-latest}"
+    container_name: docker

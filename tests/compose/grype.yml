@@ -1,0 +1,42 @@
+---
+version: "3"
+
+services:
+  docker:
+    container_name: docker
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    image: docker:dind
+    healthcheck:
+      test: ["CMD", "docker", "ps"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    privileged: true
+    volumes:
+      - "../..:/code"
+
+  grype:
+    container_name: grype
+    depends_on:
+      docker:
+        condition: service_healthy
+    environment:
+      AVRO_TOOLS_VERSION: "${AVRO_TOOLS_VERSION-}"
+      DOCKER_HOST: tcp://docker:2375
+      DOCKER_PASSWORD: "${DOCKER_PASSWORD-}"
+      DOCKER_USERNAME: "${DOCKER_USERNAME-}"
+      IMAGE_NAME: docker-archive:/mnt/dump/avro-tools.tar
+      ONLY_FIXED: 1
+      VULNERABILITIES_ALLOWED_LIST: "ALASCORRETTO8-2023-006,GHSA-493p-pfq6-5258,GHSA-4gg5-vx3j-xwc7,GHSA-599f-7c49-w659,GHSA-fg2v-w576-w4v3,GHSA-g5ww-5jh7-63cx,GHSA-jjjh-jjxp-wpff,GHSA-rgv9-q543-rqg4,GHSA-wrvw-hg22-4m67"
+    image: ghcr.io/cbdq-io/docker-grype:latest
+    volumes:
+      # This will persist the Grype DB so that it will
+      # not need to be downloaded for each invocation.
+      - grype_db:/root/.cache/grype
+      - grype_dump:/mnt/dump
+      - "../..:/code"
+
+volumes:
+  grype_db:
+  grype_dump:

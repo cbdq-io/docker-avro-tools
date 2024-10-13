@@ -1,0 +1,114 @@
+---
+#############################################################################
+# GitHub workflow file for the project.
+#############################################################################
+name: Pipeline
+
+on:
+  push:
+
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '15 0 * * TUE'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # Allows this workflow to be called from other workflows
+  workflow_call:
+
+env:
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+  DEVELOP_BRANCH: develop
+  MAIN_BRANCH: main
+  REGISTRY: ghcr.io
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Requirements
+        run: |
+          pip install -qr requirements.txt
+          pip freeze
+          pip check
+
+      - name: Lint
+        run: make lint
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test
+
+  Trivy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: make build
+
+      - name: Scan Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "avro-tools:latest"
+          trivy-config: trivy.yaml
+
+  CD:
+    needs:
+      - CI
+      - Trivy
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
+        uses: docker/setup-buildx-action@v3
+
+      - name: Get Avro Tools Version
+        if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
+        run: echo "AVRO_TOOLS_VERSION=$(make tag)" >> $GITHUB_ENV
+
+      - name: Set the Docker Tag to Latest
+        if: github.ref_name == env.DEVELOP_BRANCH
+        id: get-tag-latest
+        run: echo "TAG=latest" >> $GITHUB_ENV
+
+      - name: Get the Docker Release Tag
+        if: github.ref_name == env.MAIN_BRANCH
+        id: get-tag-release
+        run: echo "TAG=$(make tag)" >> $GITHUB_ENV
+
+      - name: Log in to the Container Registry
+        if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Images for Multiple Architectures
+        if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/cbdq-io/avro-tools:${{ env.TAG }}
+          build-args: |
+            AVRO_TOOLS_VERSION=${{ env.AVRO_TOOLS_VERSION }}
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Avro Tools ${{ env.AVRO_TOOLS_VERSION }}

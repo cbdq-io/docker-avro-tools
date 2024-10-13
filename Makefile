@@ -2,18 +2,7 @@ AVRO_TOOLS_VERSION = 1.12.0
 
 all: clean lint build test trivy
 
-KEYS:
-	curl --output KEYS https://downloads.apache.org/avro/KEYS
-	gpg --import KEYS
-
-avro-tools-$(AVRO_TOOLS_VERSION).jar:
-	curl --output avro-tools-$(AVRO_TOOLS_VERSION).jar https://repo1.maven.org/maven2/org/apache/avro/avro-tools/$(AVRO_TOOLS_VERSION)/avro-tools-$(AVRO_TOOLS_VERSION).jar
-
-avro-tools-$(AVRO_TOOLS_VERSION).jar.asc:
-	curl --output avro-tools-$(AVRO_TOOLS_VERSION).jar.asc https://repo1.maven.org/maven2/org/apache/avro/avro-tools/$(AVRO_TOOLS_VERSION)/avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
-	gpg --verify avro-tools-$(AVRO_TOOLS_VERSION).jar.asc avro-tools-$(AVRO_TOOLS_VERSION).jar
-
-build: KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
+build:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose build avro-tools
 
 changelog:

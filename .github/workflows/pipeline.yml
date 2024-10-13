@@ -18,6 +18,9 @@ on:
   workflow_call:
 
 env:
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+  DEVELOP_BRANCH: develop
+  MAIN_BRANCH: main
   REGISTRY: ghcr.io
 
 jobs:

@@ -111,4 +111,4 @@ jobs:
             ghcr.io/cbdq-io/avro-tools:${{ env.TAG }}
           build-args: |
             AVRO_TOOLS_VERSION=${{ env.AVRO_TOOLS_VERSION }}
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Avro Tools ${{ env.tag }}
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Avro Tools ${{ env.AVRO_TOOLS_VERSION }}

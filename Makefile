@@ -1,4 +1,4 @@
-AVRO_TOOLS_VERSION = 1.11.3
+AVRO_TOOLS_VERSION = 1.12.0
 
 all: clean lint build test trivy
 
@@ -28,14 +28,6 @@ cleanall: clean
 	rm -f KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
 	docker system prune --force --volumes
 	docker volume prune --all --force
-
-grype: KEYS avro-tools-$(AVRO_TOOLS_VERSION).jar avro-tools-$(AVRO_TOOLS_VERSION).jar.asc
-	docker compose -f tests/compose/grype.yml up docker --wait
-	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c 'docker build --build-arg AVRO_TOOLS_VERSION=${AVRO_TOOLS_VERSION} -t avro-tools:latest /code'
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "docker images"
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "docker save -o /mnt/dump/avro-tools.tar avro-tools:latest"
-	docker compose -f tests/compose/grype.yml run --rm --entrypoint bash grype -c "ls -l /mnt/dump"
-	docker compose -f tests/compose/grype.yml run --rm grype
 
 lint:
 	yamllint -s .

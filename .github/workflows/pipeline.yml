@@ -101,9 +101,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Avro Tools Components for Build
-        run: make avro-tools-${{ env.AVRO_TOOLS_VERSION }}.jar avro-tools-${{ env.AVRO_TOOLS_VERSION }}.jar.asc
-
       - name: Build and Push Images for Multiple Architectures
         if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
         uses: docker/build-push-action@v6

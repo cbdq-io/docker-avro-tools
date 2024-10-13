@@ -79,6 +79,10 @@ jobs:
         if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
         uses: docker/setup-buildx-action@v3
 
+      - name: Get Avro Tools Version
+        if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
+        run: echo "AVRO_TOOLS_VERSION=$(make tag)" >> $GITHUB_ENV
+
       - name: Set the Docker Tag to Latest
         if: github.ref_name == env.DEVELOP_BRANCH
         id: get-tag-latest
@@ -97,6 +101,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Avro Tools Components for Build
+        run: make avro-tools-${{ env.AVRO_TOOLS_VERSION }}.jar avro-tools-${{ env.AVRO_TOOLS_VERSION }}.jar.asc
+
       - name: Build and Push Images for Multiple Architectures
         if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
         uses: docker/build-push-action@v6
@@ -106,5 +113,5 @@ jobs:
           tags: |
             ghcr.io/cbdq-io/avro-tools:${{ env.TAG }}
           build-args: |
-            AVRO_TOOLS_VERSION=${{ env.tag }}
+            AVRO_TOOLS_VERSION=${{ env.AVRO_TOOLS_VERSION }}
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Avro Tools ${{ env.tag }}

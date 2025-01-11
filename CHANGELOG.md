@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 1.12.0
+
+### Changes
+
+* Upgrade from Java 11 to Java 17. [Ben Dalling]
+
+
 ## 1.12.0 (2024-10-13)
 
 ### New

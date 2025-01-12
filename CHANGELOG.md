@@ -1,7 +1,14 @@
 # Changelog
 
 
-## 1.12.0-20240112
+## 1.12.0-2
+
+### Fix
+
+* Correct image tagging. [Ben Dalling]
+
+
+## 1.12.0-20240112 (2025-01-12)
 
 ### Changes
 

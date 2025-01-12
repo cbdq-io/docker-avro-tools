@@ -1,5 +1,5 @@
 AVRO_TOOLS_VERSION = 1.12.0
-INCREMENT = 20240112
+INCREMENT = 2
 
 all: clean lint build test trivy
 

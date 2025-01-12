@@ -91,7 +91,7 @@ jobs:
       - name: Get the Docker Release Tag
         if: github.ref_name == env.MAIN_BRANCH
         id: get-tag-release
-        run: echo "TAG=$(make tag)" >> $GITHUB_ENV
+        run: echo "TAG=$(make avro-version)" >> $GITHUB_ENV
 
       - name: Log in to the Container Registry
         if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH

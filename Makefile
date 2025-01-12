@@ -10,7 +10,7 @@ build:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose build avro-tools
 
 changelog:
-	GIT_TAG=$(AVRO_TOOLS_VERSION) gitchangelog > CHANGELOG.md
+	GIT_TAG=$(AVRO_TOOLS_VERSION)-$(INCREMENT) gitchangelog > CHANGELOG.md
 
 clean:
 	docker rm -f avro-tools

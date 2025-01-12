@@ -1,12 +1,16 @@
 AVRO_TOOLS_VERSION = 1.12.0
+INCREMENT = 20240112
 
 all: clean lint build test trivy
+
+avro-version:
+	@echo $(AVRO_TOOLS_VERSION)
 
 build:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose build avro-tools
 
 changelog:
-	GIT_TAG=$(AVRO_TOOLS_VERSION) gitchangelog > CHANGELOG.md
+	GIT_TAG=$(AVRO_TOOLS_VERSION)-$(INCREMENT) gitchangelog > CHANGELOG.md
 
 clean:
 	docker rm -f avro-tools
@@ -25,7 +29,7 @@ lint:
 	flake8
 
 tag:
-	@echo $(AVRO_TOOLS_VERSION)
+	@echo $(AVRO_TOOLS_VERSION)-$(INCREMENT)
 
 test:
 	AVRO_TOOLS_VERSION=$(AVRO_TOOLS_VERSION) docker compose run \

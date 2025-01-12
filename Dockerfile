@@ -14,7 +14,7 @@ RUN apt-get clean \
   && wget -qO avro-tools-${AVRO_TOOLS_VERSION}.jar.asc https://repo1.maven.org/maven2/org/apache/avro/avro-tools/${AVRO_TOOLS_VERSION}/avro-tools-${AVRO_TOOLS_VERSION}.jar.asc \
   && gpg --verify avro-tools-${AVRO_TOOLS_VERSION}.jar.asc avro-tools-${AVRO_TOOLS_VERSION}.jar
 
-FROM amazoncorretto:11
+FROM amazoncorretto:17
 
 ARG AVRO_TOOLS_VERSION
 

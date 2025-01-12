@@ -4,12 +4,12 @@ Feature: Avro Tools Container Tests
     Given the TestInfra host with URL "docker://avro-tools" is ready within 10 seconds
     Then the TestInfra command "java" exists in path
 
-  Scenario: Check Java 11 is Installed
+  Scenario: Check Java 17 is Installed
     Given the TestInfra host with URL "docker://avro-tools" is ready
     When the TestInfra command is "java -version"
-    And the TestInfra package is java-11-amazon-corretto-devel
-    Then the TestInfra command stderr contains "Corretto-11"
-    And the TestInfra command stderr contains the regex "openjdk version \"11\.[0-9]"
+    And the TestInfra package is java-17-amazon-corretto-devel
+    Then the TestInfra command stderr contains "Corretto-17"
+    And the TestInfra command stderr contains the regex "openjdk version \"17\.[0-9]"
     And the TestInfra command stdout is empty
     And the TestInfra command return code is 0
     And the TestInfra package is installed
@@ -36,7 +36,7 @@ Feature: Avro Tools Container Tests
     And the TestInfra command stderr contains "Version 1.12.0"
     And the TestInfra command stderr contains "Available tools:"
 
-  Scenario: Check JAR Built With Java 11
+  Scenario: Check JAR Built With Java 11 or Above
     Given the TestInfra host with URL "docker://root@avro-tools" is ready
     When the TestInfra command is "jar xf avro-tools-1.12.0.jar"
     And the TestInfra command is "yum install -y file"

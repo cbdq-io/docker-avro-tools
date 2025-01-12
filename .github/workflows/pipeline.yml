@@ -81,7 +81,7 @@ jobs:
 
       - name: Get Avro Tools Version
         if: github.ref_name == env.MAIN_BRANCH || github.ref_name == env.DEVELOP_BRANCH
-        run: echo "AVRO_TOOLS_VERSION=$(make tag)" >> $GITHUB_ENV
+        run: echo "AVRO_TOOLS_VERSION=$(make avro-version)" >> $GITHUB_ENV
 
       - name: Set the Docker Tag to Latest
         if: github.ref_name == env.DEVELOP_BRANCH
